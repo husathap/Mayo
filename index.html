@@ -1,0 +1,37 @@
+<!Doctype html>
+<html>
+  <head>
+    <title>VN.JS</title>
+
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
+
+    <script src="jquery-2.2.3.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="bootbox.min.js"></script>
+    <script src="jsyaml.js"></script>
+    <script src="parser.js"></script>
+    <script src="prog.js"></script>
+
+    <style>
+    #dialog {
+      font-size: large;
+      background-color: white;
+      width: 100%;
+      padding: 10px;
+      border: black 1px solid;
+      border-radius: 5px;
+    }
+    </style>
+
+  </head>
+
+  <body>
+    <div id="screen">
+
+    </div>
+
+    <script>
+    compile(prog);
+    </script>
+  </body>
+</html>
