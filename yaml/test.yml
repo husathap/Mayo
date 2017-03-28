@@ -1,0 +1,76 @@
+
+- character: "testChar"
+  x: 50px
+  y: 50px
+  width: 30px
+  height: 30px
+  background: pink
+  click:
+    - dialogue:
+      - say: I am test char.
+      - say: Now move along!
+
+- navigate: "room2"
+  path: ../yaml/test2.yml
+  x: 200px
+  y: 200px
+
+- enemy: enemy1
+  type: shaker
+  x: 400px
+  y: 400px
+  deadJs: !!js/function function() { alert("Im ded!")}
+
+- enemy: enemy2
+  type: shaker
+  x: 300px
+  y: 300px
+  dead:
+    - dialogue:
+      - say: Please tell my wife. I'm not that into her!
+
+
+# - enemy: gaga
+#   type: jkkjk
+#   x: 300
+#   y: 300
+#   dead:
+
+# - exec: !!js/function function() { alert("HI!") }
+# - def: newFunc
+#   lambda:
+#     - exec: !!js/function function() { alert("HI!!")}
+#     - exec: !!js/function function() { alert("HI!!")}
+#     - alert: x
+#     - alert: y
+# - newFunc:
+#   x: gaga is a person
+#   y: gaga is not a person
+# - if: !!js/function function() { return "false"; }
+#   true:
+#     - alert: true!
+#   false:
+#     - alert: false!
+#     - alert: Again!
+#     - if: !!js/function function() { return "one"; }
+#       one:
+#         - alert: HIHIHI!
+#       two:
+#         - alert: NO!
+# - def: diag
+#   lambda:
+#   - dialogue:
+#     - say: The Lady is not pleased!
+#     - select:
+#       - I AM THE KING
+#       - HE IS THE KING
+#
+#     - label: I AM THE KING
+#     - say: Tralalala
+#     - say: I am hungry!
+#     - break:
+#
+#     - label: HE IS THE KING
+#     - say: BUDUDUDUD!
+#     - goto: I AM THE KING
+# - alert: It's all done now!

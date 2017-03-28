@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kellogg</title>
+  </head>
+
+  <body>
+    <h1>HP: <span id="playerHp">10</span></h1>
+    <div id="gameboard" style="position:absolute; width:500px; height:500px; background-color:black">
+      <div id="player" style="position:relative; width:50px; height:50px; background-color:white; left:5px; top:5px;"></div>
+    </div>
+  </body>
+
+  <script src="../js/jquery-3.2.0.min.js"></script>
+  <script src="../js/jquery.overlaps.js"></script>
+  <script src="../js/esprima.min.js"></script>
+  <script src="../js/js-yaml.js"></script>
+  <script src="../js/parse.js"></script>
+  <script src="../js/enemy.js"></script>
+
+  <script>
+  let destinationX = 0;
+  let destinationY = 0;
+  let isMoving = false;
+  let characterOrEnemyClicked = false;
+  let player = $("#player");
+  let playerUpdate;
+
+  function loadRoom(roomPath) {
+    $("#gameboard").remove();
+    $("body").append(`<div id="gameboard" style="position:absolute; width:500px; height:500px; background-color:black">
+      <div id="player" style="position:relative; width:50px; height:50px; background-color:white; left:5px; top:5px;"></div>
+    </div>`);
+
+    destinationX = 0;
+    destinationY = 0;
+    isMoving = false;
+    characterOrEnemyClicked = false;
+    playerUpdate = null;
+    playerHp = 1;
+
+    player = $("#player");
+
+    let enemies = [];
+
+    $.get(roomPath, function(data) {
+      let doc = jsyaml.load(data);
+      parser.parse(doc);
+
+      document.getElementById("gameboard").addEventListener("click", function(e) {
+        if (!characterOrEnemyClicked) {
+          isMoving = true;
+          // Solution: http://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
+          destinationX = e.pageX - $("#gameboard").offset().left;
+          destinationY = e.pageY - $("#gameboard").offset().top;
+        }
+
+        characterOrEnemyClicked = false;
+      });
+
+      playerUpdate = setInterval(function() {
+
+        if (isMoving) {
+          // Try to move the character.
+          let left = parseInt(player.css("left"));
+          let top = parseInt(player.css("top"));
+
+          let dist = Math.sqrt(Math.pow(left - destinationX, 2) + Math.pow(top - destinationY, 2));
+
+          let moveX = (destinationX - left - parseInt(player.css("width")) / 2) / dist * 2;
+          let moveY = (destinationY - top - parseInt(player.css("height")) / 2) / dist * 2;
+
+          player.css({
+            "left": String(left + moveX) + "px",
+            "top": String(top + moveY) + "px"
+          });
+
+          if (dist < 5) {
+              isMoving = false;
+          }
+
+          // Check if inside the wall or not. If so, revert.
+          $(".wall").each(function(i, v) {
+            if (overlaps($(v), player)) {
+              isMoving = false;
+              player.css({"left": left, "top": top});
+              return;
+            }
+          });
+
+          // Check for navigation.
+          $(".navigate").each(function(i, v) {
+            if (overlaps($(v), player))
+              loadRoom($(v).attr("data"));
+          });
+        }
+
+        // Update the enemy.
+        if (!parser.isDialogueOn()) {
+          $(".enemy").each(function(i, v) {
+            $(v).data("update")($(v), player);
+            if ($(v).data("hp") <= 0) {
+
+              if ($(v).data("deadJs"))
+                $(v).data('deadJs')();
+
+              if ($(v).data("dead"))
+                parser.parse($(v).data('dead'));
+
+              $(v).remove();
+            }
+
+            if (overlaps($(v), player)) {
+              playerHp -= $(v).data("power");
+              $("#playerHp").html(playerHp);
+
+              if (playerHp <= 0)
+                window.location.href = "../html/index.html";
+            }
+          })
+        }
+      }, 10);
+    });
+  }
+
+  loadRoom("../yaml/test.yml");
+  </script>
+</html>

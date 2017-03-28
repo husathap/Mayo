@@ -1,0 +1,27 @@
+
+- character: "testChar"
+  x: 50px
+  y: 50px
+  width: 30px
+  height: 30px
+  background: orange
+  click:
+    - dialogue:
+      - say: You're trapped!
+
+# - wall: "testWall"
+#   x: 100px
+#   y: 100px
+#   width: 30px
+#   height: 100px
+#   background: blue
+
+- enemy: enemy1
+  type: shaker
+  x: 400px
+  y: 400px
+
+- enemy: enemy2
+  type: shaker
+  x: 300px
+  y: 300px
