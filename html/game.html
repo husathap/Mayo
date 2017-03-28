@@ -67,8 +67,8 @@
 
           let dist = Math.sqrt(Math.pow(left - destinationX, 2) + Math.pow(top - destinationY, 2));
 
-          let moveX = (destinationX - left - parseInt(player.css("width")) / 2) / dist * 2;
-          let moveY = (destinationY - top - parseInt(player.css("height")) / 2) / dist * 2;
+          let moveX = (destinationX - left - parseInt(player.css("width")) / 2) * 0.1;
+          let moveY = (destinationY - top - parseInt(player.css("height")) / 2) * 0.1;
 
           player.css({
             "left": String(left + moveX) + "px",
